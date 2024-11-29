@@ -1,0 +1,16 @@
+<section class="flex flex-col ">
+    @if (Blog) {
+        <div class="blog">
+            <h1>{{Blog.title}}</h1>
+            <div [ngStyle]="{'height':'100px'}">
+                <img class="w-full h-full" [src]="Blog.image" alt="blog image">
+            </div>
+            <p>{{Blog.description}}</p>
+            <p>{{Category.name}}</p>
+            <p>{{Blog.content}}</p>
+        </div>
+    }
+    @else {
+        <app-loader></app-loader>
+    }
+</section>
