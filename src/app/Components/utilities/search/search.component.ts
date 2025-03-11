@@ -1,12 +1,11 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { SearchResult } from '../../../_Services/search_result.service';
+import { SearchResult } from '../../../_services/search_result.service';
 
 @Component({
   selector: 'app-search',
   standalone: true,
   imports: [],
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.css'
+  templateUrl: './search.component.html'
 })
 export class SearchComponent {
   @ViewChild("data")

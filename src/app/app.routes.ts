@@ -7,14 +7,17 @@ import { BlogsComponent } from './Components/blogs/blogs.component';
 import { BlogDetailsComponent } from './Components/blog-details/blog-details.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { ContactusComponent } from './Components/contactus/contactus.component';
-import { ManageBlogsComponent } from './Components/Admin/manage-blogs/manage-blogs.component'; 
-import { authGuard } from './_Services/auth.guard';
+import { ManageBlogsComponent } from './Components/admin/manage-blogs/manage-blogs.component';
 import { AddblogComponent } from './Components/addblog/addblog.component';
 import { ConfirmOtpComponent } from './Components/UserAuthentication/confirm-otp/confirm-otp.component';
 import { ConfirmEmailComponent } from './Components/UserAuthentication/confirm-email/confirm-email.component';
 import { ChangeUsernameComponent } from './Components/UserAuthentication/change-username/change-username.component';
 import { UpdatePasswordComponent } from './Components/UserAuthentication/update-password/update-password.component';
 import { NotfoundComponent } from './Components/utilities/notfound/notfound.component';
+import { BlogGeneratorComponent } from './Components/blog-generator/blog-generator.component';
+import { AuthGuard } from './_services/auth.guard';
+import { ManageUsersComponent } from './Components/admin/manage-users/manage-users.component';
+import { AdminOptionsComponent } from './Components/admin/admin-options/admin-options.component';
 
 export const routes: Routes = [
     {
@@ -29,12 +32,14 @@ export const routes: Routes = [
     ,
     {
         path:"login",
-        component:LoginComponent
+        component:LoginComponent,
+        canDeactivate:[AuthGuard]
     }
     ,
     {
         path:"signup",
-        component:SignupComponent
+        component:SignupComponent,
+        canDeactivate:[AuthGuard]
     }
     ,
     {
@@ -44,7 +49,8 @@ export const routes: Routes = [
     ,
     {
         path:"contactus",
-        component:ContactusComponent
+        component:ContactusComponent,
+        canDeactivate:[AuthGuard]
     }
     ,
     {
@@ -58,40 +64,65 @@ export const routes: Routes = [
     }
     ,
     {
+        path:"generateblogs",
+        component:BlogGeneratorComponent,
+        canDeactivate:[AuthGuard]
+    }
+    ,
+    {
         path:"blogdetails/:id",
         component:BlogDetailsComponent
     }
     ,
     {
         path:"addblog",
-        component:AddblogComponent
+        component:AddblogComponent,
+        canDeactivate:[AuthGuard]
     }
     ,
     {
+        path:"admin",
+        component:AdminOptionsComponent,
+        /* canActivate:[AuthGuard],
+        data:{claimRequest: (c:any)=>c.role==="Admin"} */
+    }  
+    ,
+    {
         path:"admin/manageblogs",
-        component:ManageBlogsComponent
-        //make guard see from token if user is admin
+        component:ManageBlogsComponent,
+        /* canActivate:[AuthGuard],
+        data:{claimRequest: (c:any)=>c.role==="Admin"} */
+    }
+    ,
+    {
+        path:"admin/manageusers",
+        component:ManageUsersComponent,
+        /* canActivate:[AuthGuard],
+        data:{claimRequest: (c:any)=>c.role==="Admin"} */
     }
     ,
     {
         path:"emailconfirm",
-        component:ConfirmEmailComponent
+        component:ConfirmEmailComponent,
+        canDeactivate:[AuthGuard]
     }
     ,
     {
         path:"otpconfirm",
-        component:ConfirmOtpComponent
+        component:ConfirmOtpComponent,
     }
     ,
     {
         path:"changeusername",
-        component:ChangeUsernameComponent
+        component:ChangeUsernameComponent,
+        canDeactivate:[AuthGuard]
     }
     ,
     {
         path:"updatepassword",
-        component:UpdatePasswordComponent
-    }
+        component:UpdatePasswordComponent,
+        canDeactivate:[AuthGuard]
+    } 
     ,
     {
         path:"**",

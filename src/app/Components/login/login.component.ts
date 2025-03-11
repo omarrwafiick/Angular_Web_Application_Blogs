@@ -1,61 +1,61 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AuthenticationService } from '../../_Services/Authentication.service';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { AuthenticationService } from '../../_services/Authentication.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Login } from '../../_Models/Login';
-import { Router } from '@angular/router';
-import * as CryptoJS from 'crypto-js';
-import { ToastrService } from 'ngx-toastr';
-import { TitleService } from '../../_Services/titles.service';
+import { Login } from '../../_models/Login';
+import { Router, RouterLink } from '@angular/router';
+import { TitleService } from '../../_services/titles.service';
+import { deactOnManyComponents } from '../../_services/auth.guard';
+import { CanExitClass } from '../../_services/can_exit.service';
+import { FormsOperations } from '../utilities/forms/formoperations';
+import { NgClass, NgIf } from '@angular/common';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  imports: [ReactiveFormsModule,RouterLink,NgClass,NgIf],
+  templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends FormsOperations implements OnInit , deactOnManyComponents{
   titleService= inject(TitleService)
   pageTitle:string="Log in - Blurb";
   pageDescriptipn:string="";
-  http = inject(AuthenticationService);
+  logo:string="assets/icon.png";
+  http = inject(AuthenticationService); 
   builder = inject(FormBuilder);
   router = inject(Router);
-  toaster = inject(ToastrService);
   hide = true;
+  @ViewChild('rememberme')
+  rememberme:ElementRef;
   ngOnInit(): void {
+    this.CanExitComponent();
     this.titleService.TitleAndDesc(this.pageTitle,this.pageDescriptipn);
-    let email = localStorage.getItem('email');
-    let password = localStorage.getItem('encryptedPassword');
-    if(email&&password){
-      this.loginForm.controls.email.setValue(email); 
-      let pass = CryptoJS.AES.decrypt(password,"kekrekrkerkerasahduwdewd2323");
-      this.loginForm.controls.password.setValue(pass);
-    }
   }
+
   loginForm=this.builder.group({
-    email:['',Validators.required,Validators.email],
-    password:['',Validators.required]
-  })
+    email:['',[Validators.required,Validators.email,Validators.maxLength(254),Validators.minLength(7)]],
+    password:['',Validators.required,Validators.maxLength(150),Validators.minLength(10)]
+  },{validators:this.passMatchValidator})
+
+  CanExit = inject(CanExitClass);
+  CanExitComponent(){
+    this.CanExit.formForConfirm=this.loginForm;
+    return this.CanExit.CanExit();
+  }
+
   Login(){
     if(this.loginForm.valid){
       let user = new Login();
       let vals = this.loginForm.value;
-      user.email=vals.email;
-      user.password=vals.password;
-      this.http.Login(user).subscribe({next:(response:any)=>{
-        localStorage.setItem("id",response.UserId);
-        localStorage.setItem("username",response.userName);
-        localStorage.setItem("gender",response.gender);
-        localStorage.setItem("email",response.email);
-        localStorage.setItem("token",response.Token)
-        this.router.navigate([""]);
-      }})
-    }
-    else{
-      alert("please enter data required");
+      user.email=this.sanitizeInput(vals.email);
+      user.password=this.sanitizeInput(vals.password);
+      //dispatch action
     }
   }
+
   ForgetPass(){
-    
+    //open email confirm route by dispatch
+  }
+
+  DisplayError(control:string){
+    return this.hasDisplayableError(this.loginForm,control);
   }
 }

@@ -1,46 +1,62 @@
-<section class="my-10 px-20">
-    <div class="flex justify-between px-10">
-        <h1>manage blogs</h1>
-        #open a pop up to add blog
-        <button mat-raised-button color="primary" >create new blog</button>
-    </div>
-    <mat-form-field class="w-full">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="FilterTbl($event)" placeholder="Search" #input>
-      </mat-form-field> 
-      
-      <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort> 
-      
-          <ng-container matColumnDef="Title">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> title </th>
-            <td mat-cell *matCellDef="let row"> {{row.title}} </td>
-          </ng-container>
-      
-          <ng-container matColumnDef="CategoryId">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> category </th>
-            <td mat-cell *matCellDef="let row"> {{GetCategoryName(row.category)}}</td>
-          </ng-container>
-      
-          <ng-container matColumnDef="Action">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> actions </th>
-            <td mat-cell *matCellDef="let row"> 
-                <button mat-raised-button color="accent" class="mr-4" [routerLink]="'/admin/blog/updateblog/'+row.id">edit</button>
-                <button mat-raised-button color="warn" (click)="Delete(row)">delete</button>
-            </td>
-          </ng-container>
+<div class="relative flexx flex-col w-full"> 
+    <section class="my-10 w-10/12"> 
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="capitalize !font-medium h-full m-p">manage blogs</h2>
+              <div class="h-full flexx">
+                  <button type="button" (click)="AddBlog()" class="text-lg w-full bg-blue-500 ease-in-out duration-200 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md capitalize">create blog</button>
+              </div>
+        </div>
+        <mat-form-field class="w-full">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="FilterTbl($event)" placeholder="Search" #input>
+          </mat-form-field> 
+          
+          <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort> 
+          
+              <ng-container class="capitalize" matColumnDef="Title">
+                <th class="capitalize" mat-header-cell *matHeaderCellDef mat-sort-header> title </th>
+                <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+              </ng-container>
+          
+              <ng-container class="capitalize" matColumnDef="CategoryId">
+                <th class="capitalize" mat-header-cell *matHeaderCellDef mat-sort-header> category </th>
+                <td mat-cell *matCellDef="let row"> {{GetCategoryName(row.category)}}</td>
+              </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <ng-container class="capitalize" matColumnDef="Likes">
+                <th class="capitalize" mat-header-cell *matHeaderCellDef mat-sort-header> likes </th>
+                <td mat-cell *matCellDef="let row"> {{row.likes}} </td>
+              </ng-container>
 
-           <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-           </tr> 
-        </table>
-      
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-      </div>
-</section>
+              <ng-container class="capitalize" matColumnDef="Shares">
+                <th class="capitalize" mat-header-cell *matHeaderCellDef mat-sort-header> shares </th>
+                <td mat-cell *matCellDef="let row"> {{row.shares}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="Action">
+                <th class="capitalize" mat-header-cell *matHeaderCellDef mat-sort-header> actions </th>
+                <td mat-cell *matCellDef="let row"> 
+                  <button type="button" (click)="ManageBlog(row)" class="bg-sky-300 ease-in-out duration-200 hover:bg-sky-400 text-black font-medium py-2 px-4 rounded-full capitalize mr-2" >edit</button>
+                  <button type="button" (click)="Delete(row)" class="bg-red-500 ease-in-out duration-200 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full capitalize mr-2" >delete</button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              <tr class="mat-row" *matNoDataRow>
+                    <td class="capitalize" class="mat-cell" colspan="4">no data matching the filter "{{input.value}}"</td>
+              </tr> 
+            </table>
+          
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+          </div>
+    </section>
+</div>
+
 
   
   

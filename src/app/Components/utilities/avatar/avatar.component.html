@@ -1,13 +1,16 @@
-<div>
-    <img (click)="Trigger()" class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 cursor-pointer" [src]="avatar" alt="avatar">
-    <div (click)="Trigger()" *ngIf="popup" class="absolute z-10 capitalize inline-block w-64  text-gray-500 duration-300 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
-        <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-            <p class="font-semibold text-gray-900 dark:text-white capitalize text-lg">settings</p>
+<div class="relative" appPopupListener (cliko)="Close()">
+    <img (click)="Trigger()" class="w-10 h-10 p-1 rounded-full ring-2 ring-slate-300 dark:ring-gray-500 cursor-pointer bg-white" [src]="avatar" alt="avatar">
+    <div (click)="Trigger()" *ngIf="popup" class="absolute mt-2 z-40 bg-white capitalize inline-block w-64 duration-300 border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+        <div class="px-3 mt-3 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+            <h6 class="!font-medium text-gray-900 dark:text-white capitalize !text-lg">{{username}}</h6>
         </div>
-        <div class="px-3 py-2 capitalize">
-            <p class="cursor-pointer" routerLink="/profile">profile</p>
-            <p class="cursor-pointer" routerLink="/updatepassword">update password</p>
-            <p class="cursor-pointer" routerLink="/changeusername">change username</p>
+        <div class="capitalize mb-2">
+            <ul>
+                <li class="cursor-pointer hover:bg-gray-200 ps-3 pt-3 pb-3 text-md duration-200" routerLink="/profile">profile</li>
+                <li class="cursor-pointer hover:bg-gray-200 ps-3 pt-3 pb-3 text-md duration-200" routerLink="/updatepassword">update password</li>
+            </ul>
         </div>
+        <hr>
+        <li (click)="Logout()" routerLink="/login" class="cursor-pointer hover:bg-gray-200 ps-3 pt-3 pb-4 text-sm duration-200 text-red-500 font-medium" routerLink="/updatepassword">logout</li>
     </div>
 </div>

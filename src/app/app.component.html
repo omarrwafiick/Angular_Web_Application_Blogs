@@ -1,5 +1,6 @@
 <app-header *ngIf="header"></app-header>
+<app-ai-icon *ngIf="aiIcon"></app-ai-icon>
 <router-outlet></router-outlet>
 <app-footer *ngIf="footer"></app-footer>
 <app-loader *ngIf="loader" class="fixed w-full h-full top-0"></app-loader>
-<app-sidebar [@openClose] *ngIf="sidebar"></app-sidebar>
+<app-sidebar [@popup] *ngIf="sidebar"></app-sidebar>

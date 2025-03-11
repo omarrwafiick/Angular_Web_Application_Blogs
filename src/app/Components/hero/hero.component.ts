@@ -1,15 +1,28 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import { SearchComponent } from "../utilities/search/search.component";
-import { CategoryComponent } from "../utilities/category/category.component";
+import { MatDialog } from '@angular/material/dialog';
+import { AddblogComponent } from '../addblog/addblog.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [NgStyle, SearchComponent, CategoryComponent],
+  imports: [NgStyle, RouterLink],
   templateUrl: './hero.component.html',
-  styleUrl: './hero.component.css'
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class HeroComponent {
-  img:string="Assets/cover.jpg"
+  dialog = inject(MatDialog);
+  img:string="assets/mobile.png"
+  AddBlog() {
+    this.dialog.open(AddblogComponent, {
+      width: '60%',
+      height: '80%',
+      enterAnimationDuration: '500ms',
+      exitAnimationDuration: '200ms',
+      panelClass: 'custom-dialog-styling'
+    })
+  }
 }
+

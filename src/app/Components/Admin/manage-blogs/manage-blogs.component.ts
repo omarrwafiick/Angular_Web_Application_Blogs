@@ -4,43 +4,50 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { Blog } from '../../../_Models/Blog';
-import { BlogService } from '../../../_Services/blog.service';
-import { MatButton, MatButtonModule } from '@angular/material/button';
-import { Category } from '../../../_Models/Category';
-import { RouterLink } from '@angular/router';
-import { TitleService } from '../../../_Services/titles.service';
+import { Blog } from '../../../_models/Blog';
+import { BlogService } from '../../../_services/blog.service';
+import { Category } from '../../../_models/Category';
+import { TitleService } from '../../../_services/titles.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddblogComponent } from '../../addblog/addblog.component';
+import { NgStyle } from '@angular/common';
+import { ConfirmationService } from '../../../_services/confirm.service';
 
 @Component({
   selector: 'app-manage-blogs', 
   standalone: true,
-  imports: [MatPaginator,MatSort,MatTableModule,MatFormFieldModule,MatInputModule,MatButtonModule,RouterLink],
+  imports: [MatPaginator,MatSort,MatTableModule,MatFormFieldModule,MatInputModule],
   templateUrl: './manage-blogs.component.html',
-  styleUrl: './manage-blogs.component.css'
 })
 export class ManageBlogsComponent implements AfterViewInit,OnInit{
-  titleService= inject(TitleService)
+  titleService= inject(TitleService);
+  confirmationService = inject(ConfirmationService);
+  service = inject(BlogService);
+  dialog= inject(MatDialog)
   pageTitle:string="Manage Blogs - Blurb";
   pageDescriptipn:string="";
-  displayedColumns: string[] = ['Title', 'CategoryId','Action'];
+  displayedColumns: string[] = ['Title', 'CategoryId','Likes','Shares','Action'];
   dataSource: MatTableDataSource<Blog>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   Blogs:Blog[]=[];
   Categories:Category[]=[];
-  service = inject(BlogService);
   constructor() { 
     this.dataSource = new MatTableDataSource(this.Blogs);
   }
   ngOnInit(): void {
     this.titleService.TitleAndDesc(this.pageTitle,this.pageDescriptipn);
-    this.service.GetAllBlogs().subscribe(d=>this.Blogs=d);
-    this.dataSource.data = this.Blogs;
-    this.service.GetAllCategories().subscribe(d=>this.Categories=d);
+    this.IntialRequests();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  IntialRequests(){
+    this.service.GetAllBlogs().subscribe(d=>this.Blogs=d);
+    this.dataSource.data = this.Blogs;
+    this.service.GetAllCategories().subscribe(d=>this.Categories=d);
   }
 
   FilterTbl(event: Event) {
@@ -51,13 +58,40 @@ export class ManageBlogsComponent implements AfterViewInit,OnInit{
       this.dataSource.paginator.firstPage();
     }
   }
+
   GetCategoryName(row:Blog){
     return this.Categories.find(c=>c.id===row.categoryId?c.name:null);
   }
-  Delete(row:Blog){
-    this.service.DeleteBlog(row.id).subscribe({next:()=>{
-      this.dataSource.data = this.Blogs.filter(b=>b.id!==row.id);
-    }});
+  
+  async Delete(row:Blog){ 
+    const result = await this.confirmationService.confirm(
+      'Are you Sure you want To Delete This Record?'
+    );
+    if(result){
+      //dispatch delete action
+      /* this.service.DeleteBlog(row.id).subscribe({next:()=>{
+        this.dataSource.data = this.Blogs.filter(b=>b.id!==row.id); 
+      }});*/
+    }
+  }
+
+  ManageBlog(blog?:Blog){
+    blog? blog.isFeatured = true : '';
+    this.dialog.open(AddblogComponent,{
+      width:'65%',
+      height:'80%',
+      maxWidth: 'none',
+      enterAnimationDuration:'400ms',
+      exitAnimationDuration:'300ms',
+      panelClass: 'custom-dialog-styling',
+      data:{ 
+       blog,
+      }
+    }).afterClosed().subscribe(()=>{this.IntialRequests()})
+  }
+
+  AddBlog(){
+    this.ManageBlog();
   }
 }
 

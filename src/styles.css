@@ -10,16 +10,61 @@ body{
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box;font-family: 'Inter', sans-serif;
 }
 .flexx{ 
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.nunito-font{
-    font-family: 'Nunito';
+.racing-sans-one-regular {
+    font-family: "Racing Sans One", serif;
+    font-weight: 400;
+    font-style: normal;
 }
-.inter-font{
-    font-family: 'Inter';
+.inter-font {
+    font-family: "Inter", serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+.archivo-font {
+    font-family: "Archivo", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+  }
+::-webkit-scrollbar{
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(rgb(29 78 216),rgb(147 197 253),rgb(29 78 216));
+    border-radius: 10px;
+}
+input .ng-invalid{
+    border: 1px solid rgb(200, 0, 0) !important; 
+}
+input .ng-valid{
+    border: 1px solid rgb(41, 130, 255) !important; 
+}
+.w-custome{
+    width: 30rem;
+}
+.rotaion{
+    transform: rotate(270deg);
+}
+.custom-dialog-styling {
+    background-color: #ffffff !important;
+    border-radius: 0.75rem !important;
+}
+.m-p{
+    margin: 0 !important;
+}
+textarea{
+    resize:none;
 }

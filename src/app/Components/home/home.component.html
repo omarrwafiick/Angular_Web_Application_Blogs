@@ -1,9 +1,12 @@
 <section class="w-full h-full flex justify-center flex-col items-center">
   <div class="w-full ">
     <app-hero></app-hero>
+    <app-categories-section></app-categories-section>
+    <app-featured-blogs></app-featured-blogs>
+    <app-partners></app-partners>
+    <app-get-notified></app-get-notified>
   </div>
   <div class="w-10/12 h-full">
-    <button (click)="OpenPopUp()">addblog</button>
     <div class="grid gap-4 grid-cols-3 grid-rows-3 mt-6">
       @for (blog of featuredBlogs; track $index) {
         <app-card [blog]="blog"></app-card>

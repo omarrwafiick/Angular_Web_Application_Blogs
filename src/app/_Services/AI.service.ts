@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { AIBlog, Blog } from '../_Models/Blog';
+import { AIBlog } from '../_models/Blog';
 @Injectable({
   providedIn: 'root'
 })  
@@ -10,7 +10,11 @@ export class GenerateBlogService {
   baseUrl=environment.BaseUrl;
 
   public GenerateBlogByAi(query:string){
-    return this.http.post<AIBlog>(this.baseUrl+"/AI/UseChatGPT",query);
+    return this.GenerateBlogByAiAsync(query);
+  }
+
+  private GenerateBlogByAiAsync(query:string){
+    return this.http.post<AIBlog>(this.baseUrl+"/ai/usechatgpt",query);
   }
   
 }

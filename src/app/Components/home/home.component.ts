@@ -1,18 +1,19 @@
 import { Component, DoCheck, inject, OnInit } from '@angular/core';
-import { BlogService } from '../../_Services/blog.service';
-import { Blog } from '../../_Models/Blog';
+import { BlogService } from '../../_services/blog.service';
+import { Blog } from '../../_models/Blog';
 import { CardComponent } from '../utilities/card/card.component'; 
 import { HeroComponent } from '../hero/hero.component';
-import { SearchResult } from '../../_Services/search_result.service';
-import { AddblogComponent } from '../addblog/addblog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { TitleService } from '../../_Services/titles.service';
+import { SearchResult } from '../../_services/search_result.service';
+import { TitleService } from '../../_services/titles.service';
+import { CategoriesSectionComponent } from "../categories-section/categories-section.component";
+import { FeaturedBlogsComponent } from "../featured-blogs/featured-blogs.component";
+import { GetNotifiedComponent } from "../get-notified/get-notified.component";
+import { PartnersComponent } from "../partners/partners.component";
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CardComponent,HeroComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  imports: [CardComponent, HeroComponent, CategoriesSectionComponent, FeaturedBlogsComponent, GetNotifiedComponent, PartnersComponent],
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit,DoCheck{
   titleService= inject(TitleService)
@@ -20,7 +21,6 @@ export class HomeComponent implements OnInit,DoCheck{
   pageDescriptipn:string="";
   requests= inject(BlogService);
   searchService= inject(SearchResult);
-  dialog = inject(MatDialog);
   featuredBlogs:Blog[]=[];
   result:string="";
   ngOnInit(): void {
@@ -32,12 +32,5 @@ export class HomeComponent implements OnInit,DoCheck{
     if(this.result != ""){
         this.featuredBlogs.filter(d => d.title===this.result);
     }
-  }
-  OpenPopUp(){
-    this.dialog.open(AddblogComponent,{
-      width:'30%',
-      enterAnimationDuration:'800ms',
-      exitAnimationDuration:'800ms',
-    })
   }
 }

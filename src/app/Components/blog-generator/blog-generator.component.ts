@@ -1,32 +1,43 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { BlogService } from '../../_Services/blog.service';
-import { Category } from '../../_Models/Category';
-import { GenerateBlogService } from '../../_Services/AI.service';
-import { AIBlog, Blog } from '../../_Models/Blog';
-import { NgIf } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { TitleService } from '../../_Services/titles.service';
+import { BlogService } from '../../_services/blog.service';
+import { Category } from '../../_models/Category';
+import { GenerateBlogService } from '../../_services/AI.service';
+import { AIBlog, Blog } from '../../_models/Blog';
+import { NgStyle } from '@angular/common';
+import { TitleService } from '../../_services/titles.service';
+import { deactOnManyComponents } from '../../_services/auth.guard';
+import { CanExitClass } from '../../_services/can_exit.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-blog-generator',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgStyle,ReactiveFormsModule],
   templateUrl: './blog-generator.component.html',
-  styleUrl: './blog-generator.component.css'
 })
-export class BlogGeneratorComponent implements OnInit{
+export class BlogGeneratorComponent implements OnInit , deactOnManyComponents{
   titleService= inject(TitleService)
   pageTitle:string="Blog Generator - Blurb";
   pageDescriptipn:string="";
   Airequest=inject(GenerateBlogService);  
   blogrequest=inject(BlogService);  
-  toaster = inject(ToastrService);
-  categories:Category[]=[];
+  builder= inject(FormBuilder);
+  categories:Category[]=[]; 
   blog:AIBlog=null;
   newBlog:Blog=null;
+  BlogAiForm=this.builder.group({
+    category:['',Validators.required]
+  }); 
   ngOnInit(): void {
+    this.CanExitComponent();
     this.titleService.TitleAndDesc(this.pageTitle,this.pageDescriptipn);
     this. blogrequest.GetAllCategories().subscribe(d=>d = this.categories);
+  }
+
+  CanExit = inject(CanExitClass);
+  CanExitComponent(){
+    this.CanExit.formForConfirm=this.BlogAiForm;
+    return this.CanExit.CanExit();
   }
   AiGenerate(cat:string){
     this.Airequest.GenerateBlogByAi(cat).subscribe(d=>this.blog=d);
